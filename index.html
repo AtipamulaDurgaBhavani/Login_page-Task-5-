@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="logo.jpeg" alt="Logo" class="logo">
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">User ID</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-button">Login</button>
+                <div id="error" class="error"></div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('error').textContent = data.error;
+                } else {
+                    document.getElementById('error').textContent = ''; // Clear the error message
+                    window.location.href = 'https://www.google.com';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('error').textContent = 'Server error';
+            });
+        });
+    </script>
+</body>
+</html>
